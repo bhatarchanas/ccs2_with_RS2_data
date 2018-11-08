@@ -25,19 +25,19 @@ Run the run_bax2bam.rb script along with the arguments that are required as inpu
 `ruby run_bax2bam.rb -s sample_key.txt -o out_dir_name`
 
 ### Run LIMA and CCS2 - run_ccs2_and_barcoding_with_rs2data.rb:
+#### Arguments:
   * `SAMPLE_INFO_FILE (-s)` – This is the file which will have a list of all the PacBio jobs which are to be demutiplexed and run thorugh CCS2. The header of this file (first row) should have column names corresponding to job_id, path, bc_1, bc_2, and sample. These column names HAVE TO BE exactly as is described here because the program initializes data in each column based on these column names. Data in each column is described as follows:  
       1. job_id – The name of each pool, i.e., all the samples pooled togteher into one set will have the same pool_id.    
-      2. path_for_lima – Path to where the subreadset.xml file is located for this particular pool. This is the path that is listed as "Data path" on SMRT link. 
-      3. barcode – Name of the barcode used for this sample, can only use symmetirc barcodes at this point. 
+      2. path – Path to where the subreadset.xml file is located for this particular pool. This is the path that is listed as "Data path" on SMRT link. 
+      3. bc_1 and bc_2 – Name of the barcode used for this sample, can only use symmetirc barcodes at this point. 
       4. sample – This is the name given to each sample. This is the one that is going to be added in the FASTQ sequence header with a tag of “barcodelabel”. So, if you want any information to be kept track of, add it as a sample name. Multiple things can be kept track of in the sample name, separated by a “_”. For example, if I want to keep track of patient ID and sample ID in this location, give it the sample name “Pat123_Samp167” where Pat123 corresponds to the patient ID and Samp167 corresponds to the sample ID. This way all this information will be associated with each sequence and can later be tracked easily.   
-  * `BARCODE_FILE (-b)` - A FASTA file with all the barcode sequences.
-  * `OUTDIR (-o) ` - Path to where you want your intermediate (LIMA and CCS2) result files to be stored.
+  * `BCFILE (-b)` - A FASTA file with all the barcode sequences.
+  * `SMRTTOOLS (-p)` - This is the path where smrttools is located. Use full path, avoid relative paths.
+  * `CCSPASSES (-n)` - Specify the numer of CCS passes cut-off.
+  * `PREDACCU (-a)` - Specify the predicted accuracy cut-off.
+  * `OUTDIR (-o) ` - Path to where you want your result files to be stored.
+  * `RERUNCCS (-r)` - If CCS and completed running on these samples, when you re-run the script, do you want to re-run CCS2 as well? Answer in "yes" or "no". Default is yes. 
 
-
-samplefile, "File with all the sample information", :type => :string, :short => "-s"
-bcfile, "File with the barcodes information, in FASTA format", :type => :string, :short => "-b"
-smrttools, "Path for smrttools location", :type => :string, :short => "-p"
-ccspases, "Threshold for the number of CCS passes", :type => :string, :short => "-n"
-predaccu, "Threshold for the predicted accuracy", :type => :string, :short => "-a"
-outdir, "Path to the directory where resultant data files should be dumped", :type => :string, :short => "-o"
-rerunccs, "If ccs.bam files already exist, do you want to re-run ccs or use the already available files?", :type => :string, :short => "-r", :default => "yes"
+#### Usage:
+Run the run_ccs2_and_barcoding_with_rs2data.rb script along with the arguments that are required as input.  
+`ruby run_ccs2_and_barcoding_with_rs2data.rb -s sample_key_ccs2_and_lima.txt -b barcode_file.fasta -p xx/bin/smrttools -n 4 -a 0.9 -o out_dir_name`
